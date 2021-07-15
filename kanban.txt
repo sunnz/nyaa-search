@@ -1,0 +1,15 @@
+git email and name
+install pnpm
+setup node project
+install jest
+jest smoke test
+isntall yargs
+yargs smoke test
+load json files smoke test
+write unit test for user search and develop user search library
+wire up to cli once functions are implemented correctly against unit test
+write unit test for organization and tickets search
+wire up to cli once functions are implemented correctly against unit test
+dockerise
+allow specifying path to json files
+optimise as see fit (most likely some sort of index)
