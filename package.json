@@ -1,0 +1,16 @@
+{
+  "name": "nyaa-search",
+  "version": "0.0.0",
+  "description": "a simple command line application to search the data and return the results in a human readable format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunnz/nyaa-search.git"
+  },
+  "author": "Sunny",
+  "license": "MIT",
+  "homepage": "https://github.com/sunnz/nyaa-search#readme"
+}
