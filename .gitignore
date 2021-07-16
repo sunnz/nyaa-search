@@ -1,2 +1,3 @@
 data/*json
 .pnpm-debug.log
+node_modules
