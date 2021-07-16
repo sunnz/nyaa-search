@@ -1,7 +1,20 @@
 #!/usr/bin/env node
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
-const argv = yargs(hideBin(process.argv)).argv;
+const inquirer = require("inquirer");
 
-const { greet = null } = argv;
-console.log(greet ?? "usage: ./index.js --greet=something");
+// immediately invoked function expression (iife)
+// top level async/await not supported yet in nodejs < 16
+(async function () {
+  const argv = yargs(hideBin(process.argv)).argv;
+  const { greet = "hello" } = argv;
+  const response = await inquirer.prompt([
+    {
+      type: "string",
+      name: "name",
+      message: "what's your name?",
+      default: "someone",
+    },
+  ]);
+  console.log(`${greet} ${response.name}`);
+})();
