@@ -1,7 +1,7 @@
-const sum = require('./sum');
+const sum = require("./sum");
 
-test('sum of 1 and 2 is 3', () => {
-    expect(sum(1, 2)).toBe(3);
+test("sum of 1 and 2 is 3", () => {
+  expect(sum(1, 2)).toBe(3);
 });
 
 // // uncomment this block to ensure jest can indeed fail
