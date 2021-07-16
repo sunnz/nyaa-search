@@ -15,3 +15,7 @@ address, please copy the following json files into `./data`:
 ## test
 
     pnpm test
+
+## main script
+
+    ./index.js

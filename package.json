@@ -4,6 +4,7 @@
   "description": "a simple command line application to search the data and return the results in a human readable format",
   "main": "index.js",
   "scripts": {
+    "start": "./index.js",
     "test": "jest"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "homepage": "https://github.com/sunnz/nyaa-search#readme",
   "devDependencies": {
     "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "yargs": "^17.0.1"
   }
 }
