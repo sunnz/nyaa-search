@@ -18,4 +18,4 @@ address, please copy the following json files into `./data`:
 
 ## main script
 
-    ./index.js
+    ./src/index.js
