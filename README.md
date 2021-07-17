@@ -22,4 +22,4 @@ address, please copy the following json files into `./data`:
 
 ## main script
 
-    ./src/index.js
+    ./nyaa-search
