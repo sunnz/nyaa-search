@@ -3,7 +3,7 @@ const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
 const words = require("lodash/words");
-const findOrgByName = require("./find-org-by-name");
+const findOrgByNames = require("./find-org-by-names");
 const findOrgByTags = require("./find-org-by-tags");
 
 // load static data
@@ -31,15 +31,15 @@ const users = require("../data/users.json");
       type: "string",
       name: "query",
       message: "please enter search terms",
-      default: "plasmos",
+      default: "Plasmos",
     },
   ]);
   const queryWords = words(query);
-  const results = [
-    ...(field === "name" || field === "all" ? findOrgByName(orgs, query) : []),
-    ...(field === "tags" || field === "all"
-      ? findOrgByTags(orgs, queryWords)
-      : []),
-  ];
+  const orgsByName =
+    field === "name" || field === "all" ? findOrgByNames(orgs, queryWords) : [];
+  const orgsByTags =
+    field === "tags" || field === "all" ? findOrgByTags(orgs, queryWords) : [];
+
+  const results = [...orgsByName, ...orgsByTags];
   console.log(results);
 })();
