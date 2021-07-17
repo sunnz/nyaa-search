@@ -1,4 +1,4 @@
-const findOrgByName = require("./findOrgByName");
+const findOrgByName = require("./find-org-by-name");
 const orgs = require("../data/organizations.json");
 
 test("the id of plasmos org is 103 in our test data", () => {
