@@ -2,6 +2,7 @@
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
+const findOrgByName = require("./findOrgByName");
 
 // load static data
 const orgs = require("../data/organizations.json");
@@ -11,9 +12,10 @@ const users = require("../data/users.json");
 // immediately invoked function expression (iife)
 // top level async/await not supported yet in nodejs < 16
 (async function () {
+  // greet smoke test
   const argv = yargs(hideBin(process.argv)).argv;
   const { greet = "hello" } = argv;
-  const response = await inquirer.prompt([
+  let response = await inquirer.prompt([
     {
       type: "string",
       name: "name",
@@ -22,5 +24,16 @@ const users = require("../data/users.json");
     },
   ]);
   console.log(`${greet} ${response.name}`);
-  console.log(orgs[0]);
+  // find org by name smoke test
+  response = await inquirer.prompt([
+    {
+      type: "string",
+      name: "name",
+      message:
+        "please enter the organisation name that you are looking for (case-insensitive)",
+      default: "plasmos",
+    },
+  ]);
+  const orgSearchResults = findOrgByName(orgs, response.name);
+  console.log(orgSearchResults);
 })();
