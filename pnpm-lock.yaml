@@ -3,11 +3,13 @@ lockfileVersion: 5.3
 specifiers:
   inquirer: ^8.1.2
   jest: ^27.0.6
+  lodash: ^4.17.21
   prettier: 2.3.2
   yargs: ^17.0.1
 
 dependencies:
   inquirer: 8.1.2
+  lodash: 4.17.21
   yargs: 17.0.1
 
 devDependencies:
