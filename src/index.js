@@ -2,7 +2,9 @@
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
-const findOrgByName = require("./findOrgByName");
+const words = require("lodash/words");
+const findOrgByName = require("./find-org-by-name");
+const findOrgByTags = require("./find-org-by-tags");
 
 // load static data
 const orgs = require("../data/organizations.json");
@@ -15,25 +17,29 @@ const users = require("../data/users.json");
   // greet smoke test
   const argv = yargs(hideBin(process.argv)).argv;
   const { greet = "hello" } = argv;
-  let response = await inquirer.prompt([
+  console.log(greet);
+  // find org by name/tag smoke test
+  const { field, query } = await inquirer.prompt([
     {
-      type: "string",
-      name: "name",
-      message: "what's your name?",
-      default: "someone",
+      type: "list",
+      name: "field",
+      message: "select field",
+      choices: ["name", "tags", "all"],
+      default: "all",
     },
-  ]);
-  console.log(`${greet} ${response.name}`);
-  // find org by name smoke test
-  response = await inquirer.prompt([
     {
       type: "string",
-      name: "name",
-      message:
-        "please enter the organisation name that you are looking for (case-insensitive)",
+      name: "query",
+      message: "please enter search terms",
       default: "plasmos",
     },
   ]);
-  const orgSearchResults = findOrgByName(orgs, response.name);
-  console.log(orgSearchResults);
+  const queryWords = words(query);
+  const results = [
+    ...(field === "name" || field === "all" ? findOrgByName(orgs, query) : []),
+    ...(field === "tags" || field === "all"
+      ? findOrgByTags(orgs, queryWords)
+      : []),
+  ];
+  console.log(results);
 })();
