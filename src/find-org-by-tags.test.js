@@ -10,3 +10,8 @@ test("plasmos has both Lindsay and Armstrong in its tags in our test data", () =
   expect(results).not.toHaveLength(0);
   expect(resultNames).toContain("plasmos");
 });
+
+test("searching for non-existent tag should return empty result", () => {
+  const results = findOrgByTags(orgs, ["definitelydoesnotexist"]);
+  expect(results).toHaveLength(0);
+});
