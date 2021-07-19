@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  nyaa-search:
+    build: .
+    volumes:
+      - ./data:/app/data
