@@ -1,7 +1,5 @@
 const makeTagsOrgMap = require("./make-tags-org-map");
-// internal lookup tables
-let map = null;
-let orgsMap = null;
+const makeIdMap = require("./utils/make-id-map");
 
 /**
  * @param {array} orgs list of organisation objects from an external source
@@ -10,8 +8,8 @@ let orgsMap = null;
  */
 function findOrgByTags(orgs, tags) {
   // init lookup tables
-  map = map ?? makeTagsOrgMap(orgs);
-  orgsMap = orgsMap ?? makeOrgsMap(orgs);
+  const map = makeTagsOrgMap(orgs);
+  const orgsMap = makeIdMap(orgs);
 
   // find all ids of orgs by tags from the tags to org map
   const orgIds = tags.reduce((orgIds, tag) => {
@@ -22,12 +20,6 @@ function findOrgByTags(orgs, tags) {
 
   // return all the org collection from ids
   return [...orgIds].map((id) => orgsMap.get(id));
-}
-
-function makeOrgsMap(orgs) {
-  const map = new Map();
-  orgs.forEach((org) => map.set(org._id, org));
-  return map;
 }
 
 module.exports = findOrgByTags;

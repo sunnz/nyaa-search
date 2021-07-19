@@ -1,3 +1,5 @@
+const memoize = require("lodash/memoize");
+
 /**
  * @param {array} orgs list of organisation objects from an external source
  * @returns {Map<Set>} Map of tags to one or more organisation ids in a Set
@@ -17,4 +19,4 @@ function makeTagsOrgMap(orgs) {
   return tagsOrgMap;
 }
 
-module.exports = makeTagsOrgMap;
+module.exports = memoize(makeTagsOrgMap);
