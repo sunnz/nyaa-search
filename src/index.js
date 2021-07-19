@@ -47,5 +47,5 @@ function findOrgs(field, query) {
     field === "name" || field === "all" ? findOrgByNames(orgs, queryWords) : [];
   const orgsByTags =
     field === "tags" || field === "all" ? findOrgByTags(orgs, queryWords) : [];
-  return [...orgsByName, ...orgsByTags];
+  return new Set([...orgsByName, ...orgsByTags]);
 }
