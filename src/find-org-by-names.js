@@ -1,7 +1,7 @@
 const words = require("lodash/words");
 const compose = require("lodash/fp/compose");
-const containsAll = require("./contains-all");
-const lowercaseAll = require("./lowercase-all");
+const containsAll = require("./utils/contains-all");
+const lowercaseAll = require("./utils/lowercase-all");
 // combine lowercaseAll(words()) functions
 const lowercaseWords = compose([lowercaseAll, words]);
 
