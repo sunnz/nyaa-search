@@ -18,7 +18,7 @@ function findOrgByTags(orgs, tags) {
     return new Set([...orgIds, ...ids]);
   }, new Set());
 
-  // return all the org collection from ids
+  // return all the org objects from ids
   return [...orgIds].map((id) => orgsMap.get(id));
 }
 
