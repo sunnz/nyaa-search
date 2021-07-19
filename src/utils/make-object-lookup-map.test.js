@@ -1,4 +1,4 @@
-const makeTagsOrgMap = require("./make-tags-org-map");
+const makeObjectLookupMap = require("./make-object-lookup-map");
 const orgs = [
   {
     _id: 101,
@@ -13,7 +13,7 @@ const orgs = [
 ];
 
 test("given a tag cherry the map returns 102 by direct lookup", () => {
-  const map = makeTagsOrgMap(orgs);
+  const map = makeObjectLookupMap(orgs, "_id", "tags");
   expect(map).toBeInstanceOf(Map);
 
   const ids = map.get("cherry");
@@ -23,7 +23,7 @@ test("given a tag cherry the map returns 102 by direct lookup", () => {
 });
 
 test("given a tag farley the map returns both 101 and 102 by direct lookup", () => {
-  const map = makeTagsOrgMap(orgs);
+  const map = makeObjectLookupMap(orgs, "_id", "tags");
   expect(map).toBeInstanceOf(Map);
 
   const ids = map.get("farley");

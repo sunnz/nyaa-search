@@ -30,7 +30,8 @@ const users = require("../data/users.json");
     {
       type: "string",
       name: "query",
-      message: "please enter search terms",
+      message:
+        "please enter search terms (separate terms by comma, space, camelCase, etc)",
       default: "Plasmos",
     },
   ]);
