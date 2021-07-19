@@ -19,28 +19,33 @@ const users = require("../data/users.json");
   const { greet = "hello" } = argv;
   console.log(greet);
   // find org by name/tag smoke test
-  const { field, query } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "field",
-      message: "select field",
-      choices: ["name", "tags", "all"],
-      default: "all",
-    },
-    {
-      type: "string",
-      name: "query",
-      message:
-        "please enter search terms (separate terms by comma, space, camelCase, etc)",
-      default: "Plasmos",
-    },
-  ]);
+  while (true) {
+    const { field, query } = await inquirer.prompt([
+      {
+        type: "list",
+        name: "field",
+        message: "select field",
+        choices: ["name", "tags", "all"],
+        default: "all",
+      },
+      {
+        type: "string",
+        name: "query",
+        message:
+          "please enter search terms (separate terms by comma, space, camelCase, etc)",
+        default: "Plasmos",
+      },
+    ]);
+    const results = findOrgs(field, query);
+    console.log(results);
+  }
+})();
+
+function findOrgs(field, query) {
   const queryWords = words(query);
   const orgsByName =
     field === "name" || field === "all" ? findOrgByNames(orgs, queryWords) : [];
   const orgsByTags =
     field === "tags" || field === "all" ? findOrgByTags(orgs, queryWords) : [];
-
-  const results = [...orgsByName, ...orgsByTags];
-  console.log(results);
-})();
+  return [...orgsByName, ...orgsByTags];
+}

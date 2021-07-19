@@ -23,3 +23,5 @@ address, please copy the following json files into `./data`:
 ## main script
 
     ./nyaa-search
+
+press ctrl-d when you are done :)
