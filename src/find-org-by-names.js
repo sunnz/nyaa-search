@@ -1,9 +1,5 @@
-const words = require("lodash/words");
-const compose = require("lodash/fp/compose");
-const containsAll = require("./utils/contains-all");
-const lowercaseAll = require("./utils/lowercase-all");
-// combine lowercaseAll(words()) functions
-const lowercaseWords = compose([lowercaseAll, words]);
+const makeObjectLookupMap = require("./utils/make-object-lookup-map");
+const makeIdMap = require("./utils/make-id-map");
 
 /**
  * @param {array} orgs list of organisation objects from an external source
@@ -11,9 +7,19 @@ const lowercaseWords = compose([lowercaseAll, words]);
  * @return {array} list of organisations
  */
 function findOrgByNames(orgs, names) {
-  return orgs.filter((org) =>
-    containsAll(lowercaseWords(org.name), lowercaseAll(names))
-  );
+  // init lookup tables
+  const nameToIds = makeObjectLookupMap(orgs, "_id", "name");
+  const idToOrg = makeIdMap(orgs);
+
+  // find all ids of org by name from the name-to-id map
+  const orgIds = names.reduce((orgIds, name) => {
+    const key = name.toLowerCase();
+    const ids = nameToIds.get(key) ?? [];
+    return new Set([...orgIds, ...ids]);
+  }, new Set());
+
+  // return all the org objects from ids
+  return [...orgIds].map((id) => idToOrg.get(id));
 }
 
 module.exports = findOrgByNames;
