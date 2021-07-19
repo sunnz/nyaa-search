@@ -19,6 +19,7 @@
     "prettier": "2.3.2"
   },
   "dependencies": {
+    "hash-obj": "<4.0.0",
     "inquirer": "^8.1.2",
     "lodash": "^4.17.21",
     "yargs": "^17.0.1"

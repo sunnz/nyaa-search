@@ -1,9 +1,13 @@
 const get = require("lodash/get");
 const words = require("lodash/words");
 const memoize = require("lodash/memoize");
+const hashObject = memoize(require("hash-obj"));
 
 /**
+ * create a Map of objects such that you can access any objects via a values scrapped from given path
  * @param {array<object>} objects list of objects from an external source (json)
+ * @param {string} identifier property name of the object that contains the identifier eg "_id"
+ * @param {string} path the path of the property to use as the map key
  * @returns {Map<Set>} Map of each value to one or more ids
  */
 function makeObjectLookupMap(objects, identifier, path) {
@@ -25,4 +29,6 @@ function makeObjectLookupMap(objects, identifier, path) {
   return map;
 }
 
-module.exports = memoize(makeObjectLookupMap);
+module.exports = memoize(makeObjectLookupMap, (objects, identifier, path) => {
+  return `${hashObject(objects)},${identifier},${path}`;
+});

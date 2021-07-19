@@ -1,4 +1,5 @@
 const memoize = require("lodash/memoize");
+const hashObject = memoize(require("hash-obj"));
 
 /**
  * create a Map of objects such that you can access any objects via an identifier
@@ -10,4 +11,6 @@ function makeIdMap(objects, identifier = "_id") {
   return new Map(objects.map((object) => [object[identifier], object]));
 }
 
-module.exports = memoize(makeIdMap);
+module.exports = memoize(makeIdMap, (objects, identifier) => {
+  return `${hashObject(objects)},${identifier}`;
+});
