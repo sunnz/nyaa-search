@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+const { inspect } = require("util");
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
 const words = require("lodash/words");
 const findOrgByNames = require("./find-org-by-names");
 const findOrgByTags = require("./find-org-by-tags");
+const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
 
 // load static data
 const orgs = require("../data/organizations.json");
@@ -37,7 +39,7 @@ const users = require("../data/users.json");
       },
     ]);
     const results = findOrgs(field, query);
-    console.log(results);
+    prettyPrint(results);
   }
 })();
 
@@ -47,5 +49,25 @@ function findOrgs(field, query) {
     field === "name" || field === "all" ? findOrgByNames(orgs, queryWords) : [];
   const orgsByTags =
     field === "tags" || field === "all" ? findOrgByTags(orgs, queryWords) : [];
-  return new Set([...orgsByName, ...orgsByTags]);
+  const uniqueResults = new Set([...orgsByName, ...orgsByTags]);
+  const resultsWithUsers = loadRelatedEntitiesForOrgs(
+    [...uniqueResults],
+    "users",
+    users
+  );
+  const resultsWithTickets = loadRelatedEntitiesForOrgs(
+    resultsWithUsers,
+    "tickets",
+    tickets
+  );
+  return resultsWithTickets;
+}
+
+function prettyPrint(data) {
+  console.log(
+    inspect(data, {
+      colors: true,
+      depth: null,
+    })
+  );
 }
