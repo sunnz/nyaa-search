@@ -1,6 +1,6 @@
-const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
-const users = require("../test-data/users.json");
-const tickets = require("../test-data/tickets.json");
+const { loadRelatedEntitiesForOrgs } = require("./load-related-entities");
+const users = require("../../test-data/users.json");
+const tickets = require("../../test-data/tickets.json");
 const orgs = [
   {
     _id: 119,

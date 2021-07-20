@@ -17,7 +17,10 @@ const {
   findTicketByDescription,
   findTicketByTags,
 } = require("./find-ticket");
-const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
+const {
+  loadRelatedEntitiesForOrgs,
+  loadRelatedEntitiesForTickets,
+} = require("./utils/load-related-entities");
 
 // load static data
 const orgs = require("../data/organizations.json");
@@ -155,7 +158,25 @@ function findTickets(field, query) {
     ...ticketsByDescription,
     ...ticketsByTags,
   ]);
-  return uniqueResults;
+  const withSubmitters = loadRelatedEntitiesForTickets(
+    [...uniqueResults],
+    "submitter_id",
+    "submitter",
+    users
+  );
+  const withAssignees = loadRelatedEntitiesForTickets(
+    withSubmitters,
+    "assignee_id",
+    "assignee",
+    users
+  );
+  const withOrgs = loadRelatedEntitiesForTickets(
+    withAssignees,
+    "organization_id",
+    "organization",
+    orgs
+  );
+  return withOrgs;
 }
 
 function prettyPrint(data) {
