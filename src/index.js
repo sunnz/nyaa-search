@@ -18,8 +18,16 @@ const {
   findTicketByTags,
 } = require("./find-ticket");
 const {
+  findUserByName,
+  findUserByAlias,
+  findUserBySignature,
+  findUserByRole,
+  findUserByTags,
+} = require("./find-user");
+const {
   loadRelatedEntitiesForOrgs,
   loadRelatedEntitiesForTickets,
+  loadRelatedOrgForUsers,
 } = require("./utils/load-related-entities");
 
 // load static data
@@ -41,7 +49,7 @@ const users = require("../data/users.json");
         type: "list",
         name: "type",
         message: "what would you like to search today?",
-        choices: ["organisations", "tickets"],
+        choices: ["organisations", "tickets", "users"],
         default: "organisations",
       },
     ]);
@@ -90,6 +98,25 @@ const users = require("../data/users.json");
         },
       ]);
       const results = findTickets(field, query);
+      prettyPrint(results);
+    } else if (type === "users") {
+      const { field, query } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "field",
+          message: "select field",
+          choices: ["all", "name", "alias", "signature", "role", "tags"],
+          default: "all",
+        },
+        {
+          type: "string",
+          name: "query",
+          message:
+            "please enter search terms (separate terms by comma, space, camelCase, etc)",
+          default: "Daniel",
+        },
+      ]);
+      const results = findUsers(field, query);
       prettyPrint(results);
     }
   }
@@ -176,6 +203,40 @@ function findTickets(field, query) {
     "organization",
     orgs
   );
+  return withOrgs;
+}
+
+function findUsers(field, query) {
+  const queryWords = words(query);
+  const usersByName =
+    field === "name" || field === "all"
+      ? findUserByName(users, queryWords)
+      : [];
+  const usersByAlias =
+    field === "alias" || field === "all"
+      ? findUserByAlias(users, queryWords)
+      : [];
+  const usersBySignature =
+    field === "signature" || field === "all"
+      ? findUserBySignature(users, queryWords)
+      : [];
+  const usersByRole =
+    field === "role" || field === "all"
+      ? findUserByRole(users, queryWords)
+      : [];
+  const usersByTags =
+    field === "tags" || field === "all"
+      ? findUserByTags(users, queryWords)
+      : [];
+
+  const uniqueResults = new Set([
+    ...usersByName,
+    ...usersByAlias,
+    ...usersBySignature,
+    ...usersByRole,
+    ...usersByTags,
+  ]);
+  const withOrgs = loadRelatedOrgForUsers([...uniqueResults], orgs);
   return withOrgs;
 }
 

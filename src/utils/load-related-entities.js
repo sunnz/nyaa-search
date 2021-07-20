@@ -45,4 +45,27 @@ function loadRelatedEntitiesForTickets(tickets, fieldName, type, entities) {
   });
 }
 
-module.exports = { loadRelatedEntitiesForOrgs, loadRelatedEntitiesForTickets };
+/**
+ * @param {array<object>} users
+ * @param {string} fieldName field name of the ticket to load entity id
+ * @param {string} type name of the property to be added to each ticket
+ * to contain all the related entities, for example, "submitters"
+ * @param {array<object>} orgs
+ * @return {array<object>}
+ */
+function loadRelatedOrgForUsers(users, orgs) {
+  // map to get the actual entity object from its own id
+  const idToOrg = makeIdMap(orgs);
+  // add them into each object
+  return users.map((user) => {
+    const orgId = user.organization_id;
+    const org = idToOrg.get(orgId);
+    return { ...user, org };
+  });
+}
+
+module.exports = {
+  loadRelatedEntitiesForOrgs,
+  loadRelatedEntitiesForTickets,
+  loadRelatedOrgForUsers,
+};
