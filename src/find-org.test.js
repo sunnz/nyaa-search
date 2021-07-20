@@ -1,4 +1,8 @@
-const { findOrgByNames, findOrgByTags } = require("./find-org");
+const {
+  findOrgByNames,
+  findOrgByTags,
+  findOrgByOrgType,
+} = require("./find-org");
 const orgs = require("../test-data/organizations.json");
 
 test("search by multiple names", () => {
@@ -26,4 +30,9 @@ test("plasmos has both Lindsay and Armstrong in its tags in our test data", () =
 test("searching for non-existent tag should return empty result", () => {
   const results = findOrgByTags(orgs, ["__definitelydoesnotexist__"]);
   expect(results).toHaveLength(0);
+});
+
+test("search by organisation type", () => {
+  const artisans = findOrgByOrgType(orgs, ["artisan"]);
+  expect(artisans).not.toHaveLength(0);
 });

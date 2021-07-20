@@ -4,7 +4,14 @@ const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
 const words = require("lodash/words");
-const { findOrgByNames, findOrgByTags } = require("./find-org");
+const {
+  findOrgByNames,
+  findOrgByTags,
+  findOrgByUrl,
+  findOrgByDomainNames,
+  findOrgByDateTime,
+  findOrgByOrgType,
+} = require("./find-org");
 const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
 
 // load static data
@@ -26,7 +33,15 @@ const users = require("../data/users.json");
         type: "list",
         name: "field",
         message: "select field",
-        choices: ["name", "tags", "all"],
+        choices: [
+          "all",
+          "name",
+          "tags",
+          "url",
+          "domain names",
+          "date time",
+          "organisation type (MegaCorp/Artisan/Non profit)",
+        ],
         default: "all",
       },
       {
@@ -48,7 +63,29 @@ function findOrgs(field, query) {
     field === "name" || field === "all" ? findOrgByNames(orgs, queryWords) : [];
   const orgsByTags =
     field === "tags" || field === "all" ? findOrgByTags(orgs, queryWords) : [];
-  const uniqueResults = new Set([...orgsByName, ...orgsByTags]);
+  const orgsByUrl =
+    field === "url" || field === "all" ? findOrgByUrl(orgs, queryWords) : [];
+  const orgsByDomainNames =
+    field === "domain names" || field === "all"
+      ? findOrgByDomainNames(orgs, queryWords)
+      : [];
+  const orgsByDateTime =
+    field === "date time" || field === "all"
+      ? findOrgByDateTime(orgs, queryWords)
+      : [];
+  const orgsByOrgType =
+    field === "organisation type (MegaCorp/Artisan/Non profit)" ||
+    field === "all"
+      ? findOrgByOrgType(orgs, queryWords)
+      : [];
+  const uniqueResults = new Set([
+    ...orgsByName,
+    ...orgsByTags,
+    ...orgsByUrl,
+    ...orgsByDomainNames,
+    ...orgsByDateTime,
+    ...orgsByOrgType,
+  ]);
   const resultsWithUsers = loadRelatedEntitiesForOrgs(
     [...uniqueResults],
     "users",
