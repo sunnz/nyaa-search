@@ -12,6 +12,11 @@ const {
   findOrgByDateTime,
   findOrgByOrgType,
 } = require("./find-org");
+const {
+  findTicketBySubject,
+  findTicketByDescription,
+  findTicketByTags,
+} = require("./find-ticket");
 const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
 
 // load static data
@@ -28,32 +33,62 @@ const users = require("../data/users.json");
   console.log(greet);
   // find org by name/tag smoke test
   while (true) {
-    const { field, query } = await inquirer.prompt([
+    const { type } = await inquirer.prompt([
       {
         type: "list",
-        name: "field",
-        message: "select field",
-        choices: [
-          "all",
-          "name",
-          "tags",
-          "url",
-          "domain names",
-          "date time",
-          "organisation type (MegaCorp/Artisan/Non profit)",
-        ],
-        default: "all",
-      },
-      {
-        type: "string",
-        name: "query",
-        message:
-          "please enter search terms (separate terms by comma, space, camelCase, etc)",
-        default: "Plasmos",
+        name: "type",
+        message: "what would you like to search today?",
+        choices: ["organisations", "tickets"],
+        default: "organisations",
       },
     ]);
-    const results = findOrgs(field, query);
-    prettyPrint(results);
+    if (type === "organisations") {
+      const { field, query } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "field",
+          message: "select field",
+          choices: [
+            "all",
+            "name",
+            "tags",
+            "url",
+            "domain names",
+            "date time",
+            "organisation type (MegaCorp/Artisan/Non profit)",
+          ],
+          default: "all",
+        },
+        {
+          type: "string",
+          name: "query",
+          message:
+            "please enter search terms (separate terms by comma, space, camelCase, etc)",
+          default: "Plasmos",
+        },
+      ]);
+      const results = findOrgs(field, query);
+      prettyPrint(results);
+    } else if (type === "tickets") {
+      const { field, query } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "field",
+          message: "select field",
+          choices: ["all", "subject", "description", "tags"],
+          default: "all",
+        },
+        {
+          type: "string",
+          name: "query",
+          message:
+            "please enter search terms (separate terms by comma, space, camelCase, etc)",
+          default: "Delaware",
+        },
+      ]);
+      const results = findTickets(field, query);
+      prettyPrint(results);
+    }
   }
 })();
 
@@ -78,6 +113,7 @@ function findOrgs(field, query) {
     field === "all"
       ? findOrgByOrgType(orgs, queryWords)
       : [];
+
   const uniqueResults = new Set([
     ...orgsByName,
     ...orgsByTags,
@@ -97,6 +133,29 @@ function findOrgs(field, query) {
     tickets
   );
   return resultsWithTickets;
+}
+
+function findTickets(field, query) {
+  const queryWords = words(query);
+  const ticketsByName =
+    field === "subject" || field === "all"
+      ? findTicketBySubject(tickets, queryWords)
+      : [];
+  const ticketsByDescription =
+    field === "description" || field === "all"
+      ? findTicketByDescription(tickets, queryWords)
+      : [];
+  const ticketsByTags =
+    field === "tags" || field === "all"
+      ? findTicketByTags(tickets, queryWords)
+      : [];
+
+  const uniqueResults = new Set([
+    ...ticketsByName,
+    ...ticketsByDescription,
+    ...ticketsByTags,
+  ]);
+  return uniqueResults;
 }
 
 function prettyPrint(data) {
