@@ -4,8 +4,7 @@ const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
 const inquirer = require("inquirer");
 const words = require("lodash/words");
-const findOrgByNames = require("./find-org-by-names");
-const findOrgByTags = require("./find-org-by-tags");
+const { findOrgByNames, findOrgByTags } = require("./find-org");
 const loadRelatedEntitiesForOrgs = require("./load-related-entities-for-orgs");
 
 // load static data

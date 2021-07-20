@@ -1,8 +1,11 @@
-const findOrgByTags = require("./find-org-by-tags");
-const orgs = require("../test-data/organizations.json");
+const findEntityByFieldValues = require("./find-entity-by-field-values");
+const orgs = require("../../test-data/organizations.json");
 
 test("plasmos has both Lindsay and Armstrong in its tags in our test data", () => {
-  const results = findOrgByTags(orgs, ["lindsay", "armstrong"]);
+  const results = findEntityByFieldValues(orgs, "tags", [
+    "lindsay",
+    "armstrong",
+  ]);
   const resultNames = results.reduce((names, result) => {
     names.push(result.name.toLowerCase());
     return names;
@@ -12,6 +15,8 @@ test("plasmos has both Lindsay and Armstrong in its tags in our test data", () =
 });
 
 test("searching for non-existent tag should return empty result", () => {
-  const results = findOrgByTags(orgs, ["definitelydoesnotexist"]);
+  const results = findEntityByFieldValues(orgs, "tags", [
+    "definitelydoesnotexist",
+  ]);
   expect(results).toHaveLength(0);
 });
