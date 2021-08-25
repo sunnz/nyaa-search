@@ -13,7 +13,7 @@ penalty - only the first call needs additional setup time.
 
 ## requirements
 
-- node 15.x
+- node 16.x
 - pnpm 6.x
 
 ## data
